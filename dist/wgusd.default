@@ -1,0 +1,8 @@
+# Which interface should wgusd (re)configure?
+WGUSD_INTERFACE=wg0
+
+# Which zone should be queried?
+WGUSD_ZONE=example.com
+
+# If service discovery fails, which fallback should be configured?
+WGUSD_FALLBACK=

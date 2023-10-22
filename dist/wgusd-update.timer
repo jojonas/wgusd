@@ -1,0 +1,10 @@
+[Unit]
+Description=Regularily update the Wireguard peer endpoint using DNS service discovery.
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=60s
+AccuracySec=15s
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,31 @@
+name: "wgusd"
+arch: "amd64"
+platform: "linux"
+version: "v1.0.0"
+section: "default"
+priority: "extra"
+recommends:
+- wg-utils
+maintainer: "Jonas Lieb"
+description: |
+  wgusd (Wireguard micro service discovery) allows to discover a Wireguard
+  server endpoint via DNS.
+homepage: "https://github.com/jojonas/wgusd"
+license: "MIT"
+contents:
+- src: ../wgusd
+  dst: /usr/bin/wgusd
+
+- src: ../README.md
+  dst: /usr/share/doc/wgusd/README.md
+- src: ../LICENSE.txt
+  dst: /usr/share/doc/wgusd/LICENSE.txt
+
+- src: ./wgusd.default
+  dst: /etc/default/wgusd
+  type: config
+
+- src: ./wgusd-update.service
+  dst: /usr/lib/systemd/system/wgusd-update.service
+- src: ./wgusd-update.timer
+  dst: /usr/lib/systemd/system/wgusd-update.timer
