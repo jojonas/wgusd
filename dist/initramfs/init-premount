@@ -16,14 +16,14 @@ esac
 [ -x /bin/wgusd ] || exit 0
 
 run_wgusd() {
-    exec /bin/wgusd
+    export WGUSD_INTERFACE
+    export WGUSD_ZONE
+    export WGUSD_FALLBACK
+    exec /bin/wgusd -v
 }
 
 if [ -e /etc/wgusd/wgusd.conf ]; then
     . /etc/wgusd/wgusd.conf
-    export WGUSD_INTERFACE
-    export WGUSD_ZONE
-    export WGUSD_FALLBACK
 fi
 
 . /scripts/functions
