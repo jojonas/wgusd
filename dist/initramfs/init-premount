@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PREREQ=""
+PREREQ="wireguard"
 prereqs()
 {
     echo "$PREREQ"
@@ -19,7 +19,7 @@ run_wgusd() {
     export WGUSD_INTERFACE
     export WGUSD_ZONE
     export WGUSD_FALLBACK
-    exec /bin/wgusd -v
+    exec /bin/wgusd -v -l 60
 }
 
 if [ -e /etc/wgusd/wgusd.conf ]; then

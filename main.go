@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 	flag "github.com/spf13/pflag"
@@ -20,12 +21,14 @@ func main() {
 	var zone string = os.Getenv("WGUSD_ZONE")
 	var iface string = os.Getenv("WGUSD_INTERFACE")
 	var fallbackEndpoint string = os.Getenv("WGUSD_FALLBACK")
+	var loopSeconds int = 0
 	var verbosity int = 0
 
 	flag.StringVarP(&zone, "zone", "z", zone, "Zone to query for SRV records")
 	flag.StringVarP(&iface, "interface", "i", iface, "Wireguard interface to (re)configure")
-	flag.CountVarP(&verbosity, "verbose", "v", "Verbose output (use multiple times to get debug output)")
 	flag.StringVar(&fallbackEndpoint, "fallback", fallbackEndpoint, "Fallback endpoint, configured when lookup fails")
+	flag.IntVarP(&loopSeconds, "loop", "l", loopSeconds, "Repeat every n seconds, 0 to disable.")
+	flag.CountVarP(&verbosity, "verbose", "v", "Verbose output (use multiple times to get debug output)")
 
 	flag.Parse()
 
@@ -59,6 +62,18 @@ func main() {
 		}
 	}
 
+	for {
+		mainloop(iface, zone, fallbackHost, fallbackPort)
+
+		if loopSeconds <= 0 {
+			break
+		}
+
+		time.Sleep(time.Second * time.Duration(loopSeconds))
+	}
+}
+
+func mainloop(iface string, zone string, fallbackHost string, fallbackPort uint16) {
 	log.Infof("Looking up Wireguard endpoint for %q...", zone)
 	hostname, port, err := lookupEndpoint(zone)
 	if err != nil {
@@ -69,21 +84,21 @@ func main() {
 			hostname = fallbackHost
 			port = fallbackPort
 		} else {
-			log.Fatal("No fallback provided.")
+			log.Errorf("No fallback provided.")
+			return
 		}
 	} else {
 		log.Infof("Retrieved Wireguard endpoint: %s:%d", hostname, port)
 	}
 
-	if iface == "" {
+	if iface != "" {
+		err = reconfigureInterface(iface, hostname, port)
+		if err != nil {
+			log.Errorf("Error reconfiguring interface %s with endpoint %s:%d : %v", iface, hostname, port, err)
+		}
+	} else {
 		fmt.Printf("%s:%d\n", hostname, port)
 		log.Info("Dry run completed.")
-		return
-	}
-
-	err = reconfigureInterface(iface, hostname, port)
-	if err != nil {
-		log.Errorf("Error reconfiguring interface %s with endpoint %s:%d : %v", iface, hostname, port, err)
 	}
 }
 
