@@ -18,7 +18,7 @@ func main() {
 	var err error
 
 	var zone string = os.Getenv("WGUSD_ZONE")
-	var iface string = os.Getenv("WGUSD_IFACE")
+	var iface string = os.Getenv("WGUSD_INTERFACE")
 	var fallbackEndpoint string = os.Getenv("WGUSD_FALLBACK")
 	var verbosity int = 0
 
