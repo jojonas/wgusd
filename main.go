@@ -39,7 +39,7 @@ func main() {
 	}
 
 	if zone == "" {
-		log.Fatal("No domain specified!")
+		log.Fatal("No zone specified!")
 	}
 
 	if iface == "" {
@@ -94,7 +94,7 @@ func splitHostPort(endpoint string) (string, uint16, error) {
 		return "", 0, fmt.Errorf("split host:port from %q: %v", endpoint, err)
 	}
 
-	port64, err := strconv.ParseInt(portstr, 10, 16)
+	port64, err := strconv.ParseUint(portstr, 10, 16)
 	if err != nil {
 		return "", 0, fmt.Errorf("parse port %q from %q: %v", portstr, endpoint, err)
 	}
