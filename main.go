@@ -81,7 +81,6 @@ func main() {
 		return
 	}
 
-	log.Infof("Reconfiguring interface %s...", iface)
 	err = reconfigureInterface(iface, hostname, port)
 	if err != nil {
 		log.Errorf("Error reconfiguring interface %s with endpoint %s:%d : %v", iface, hostname, port, err)
@@ -166,6 +165,8 @@ func reconfigureInterface(iface string, hostname string, port uint16) error {
 
 		return nil
 	}
+
+	log.Infof("Reconfiguring interface %s...", iface)
 
 	peerConfig := wgtypes.PeerConfig{
 		PublicKey:  peer.PublicKey,
