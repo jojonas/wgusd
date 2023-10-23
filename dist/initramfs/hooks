@@ -20,5 +20,5 @@ for so in $(ldconfig -p | sed -nr 's/^\s*libnss_files\.so\.[0-9]+\s.*=>\s*//p');
 done
 
 mkdir -p -- "$DESTDIR/etc/wgusd"
-cp -pt "$DESTDIR/etc/wgusd/wgusd.conf" "/etc/default/wgusd"
+cp -p "/etc/default/wgusd" "$DESTDIR/etc/wgusd/wgusd.conf"
 
