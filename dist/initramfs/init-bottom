@@ -1,0 +1,22 @@
+#!/bin/sh
+
+PREREQ=""
+prereqs()
+{
+    echo "$PREREQ"
+}
+
+case $1 in
+prereqs)
+    prereqs
+    exit 0
+    ;;
+esac
+
+. /scripts/functions
+
+if PID="$(cat /run/wgusd.pid 2>/dev/null)"; then
+    log_begin_msg "Stopping wgusd"
+    kill -TERM "$PID"
+    log_end_msg
+fi

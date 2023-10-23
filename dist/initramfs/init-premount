@@ -1,0 +1,32 @@
+#!/bin/sh
+
+PREREQ=""
+prereqs()
+{
+    echo "$PREREQ"
+}
+
+case $1 in
+prereqs)
+    prereqs
+    exit 0
+    ;;
+esac
+
+[ -x /bin/wgusd ] || exit 0
+
+run_wgusd() {
+    exec /bin/wgusd
+}
+
+if [ -e /etc/wgusd/wgusd.conf ]; then
+    . /etc/wgusd/wgusd.conf
+    export WGUSD_INTERFACE
+    export WGUSD_ZONE
+    export WGUSD_FALLBACK
+fi
+
+. /scripts/functions
+
+run_wgusd &
+echo $! > /run/wgusd.pid
